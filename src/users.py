@@ -1,11 +1,11 @@
-from redis import Redis
+from redis_client import RedisClient
 
 
 class UserRepository:
     """Handles user persistence in Redis."""
 
-    def __init__(self, redis: Redis) -> None:
-        self.redis = redis
+    def __init__(self, redis_client: RedisClient) -> None:
+        self.redis = redis_client.redis
 
     def _get_history_key(self, username: str) -> str:
         """Builds the Redis key for a users search history.

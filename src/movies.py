@@ -1,6 +1,5 @@
-from redis import Redis
-
 import utils
+from redis_client import RedisClient
 
 
 class MovieRepository:
@@ -11,8 +10,8 @@ class MovieRepository:
 
     _TRENDING_SCORE_MOVIES_KEY = "trending_score:movies"
 
-    def __init__(self, redis: Redis) -> None:
-        self.redis = redis
+    def __init__(self, redis_client: RedisClient) -> None:
+        self.redis = redis_client.redis
 
     def _get_normalized_title(self, title: str) -> str:
         """Normalizes the given movie title using `utils.normalize_str`.

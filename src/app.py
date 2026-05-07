@@ -1,28 +1,7 @@
-import sys
-
-from redis import Redis
-
 import utils
 from movies import MovieRepository
+from redis_client import RedisClient
 from users import UserRepository
-
-
-def create_redis_client() -> Redis:
-    """Connect to Redis. The application exits if the redis connection is not successful.
-
-    Returns:
-        Redis: The created Redis client instance.
-    """
-
-    try:
-        client = Redis(host="localhost", port=6379, decode_responses=True)
-        client.ping()
-        print("Connected to Redis")
-
-        return client
-    except Exception as error:
-        print(f"Redis is not available: {error}")
-        sys.exit(1)
 
 
 def insert_movie(movie_repository: MovieRepository, username: str) -> None:
@@ -113,8 +92,7 @@ def print_statistics(
     else:
         for index, movie in enumerate(top_trending_movies, start=1):
             print(
-                f"{index}. {movie['title']} "
-                f"(Trending Score: {movie['trending_score']})"
+                f"{index}. {movie['title']} (Trending Score: {movie['trending_score']})"
             )
 
     print("\nYour last 5 searched movies:")
@@ -133,9 +111,9 @@ def print_statistics(
 
 
 def main() -> None:
-    redis = create_redis_client()
-    movie_repository = MovieRepository(redis)
-    user_repository = UserRepository(redis)
+    redis_client = RedisClient()
+    movie_repository = MovieRepository(redis_client)
+    user_repository = UserRepository(redis_client)
 
     username = input("Enter your username: ")
 
